@@ -13,28 +13,47 @@
     ami_id: "ami-0c55b159cbfafe1f0"  # Amazon Linux 2 AMI ID
     key_name: "toy-han"
     security_group: "test-toy"
+    vpc_id: "vpc-03fdfc3b9a54cfbce"  # Replace with your VPC ID
+    subnet_id: "subnet-0221323178722f612"
   tasks:
     - name: Create a security group
       ec2_group:
         name: "{{ security_group }}"
         description: "My security group"
         region: "{{ aws_region }}"
-        aws_access_key: "{{ AKIATCKAT5PVKCD7QH3J }}"
+        aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         rules:
           - proto: tcp
-            from_port: 22
-            to_port: 22
+            ports:
+              - 22
             cidr_ip: 0.0.0.0/0
+          - proto: tcp
+            ports:
+              - 80
+            cidr_ip: 0.0.0.0/0
+
+    - name: Create EC2 key
+      ec2_key:
+        name: testkey
+        region: "{{ aws_region }}"
+      register: key_result
+
+    - name: Save Private Key
+      copy: content="{{ key_result.key.private_key }}" dest=/root/.ssh/testkey.pem mode=0400
+      when: key_result.changed
 
     - name: Launch EC2 instance
       ec2:
-        key_name: "{{ key_name }}"
+        key_name: testkey
         instance_type: "{{ instance_type }}"
         image: "{{ ami_id }}"
         region: "{{ aws_region }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        assign_public_ip: yes
         group: "{{ security_group }}"
         wait: yes
+        count: 1
         instance_tags:
           Name: "ExampleInstance"
         aws_access_key: "{{ aws_access_key }}"
