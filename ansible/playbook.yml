@@ -31,19 +31,20 @@
             cidr_ip: 0.0.0.0/0
 
     - name: Launch EC2 instance
-      amazon.aws.ec2:
+      amazon.aws.ec2_instance:
         aws_access_key: "{{ aws_access_key }}"
         aws_secret_key: "{{ aws_secret_key }}"
         group: "{{ security_group }}"
         instance_type: "{{ instance_type }}"
-        keypair: "{{ key_name }}"
-        image: "{{ ami_id }}"
-        region: "{{ aws_region }}"
+        key_name: "{{ key_name }}"
+        image_id: "{{ ami_id }}"
+        aws_region: "{{ aws_region }}"
         vpc_subnet_id: "{{ subnet_id }}"
         wait: yes
         instance_tags:
           Name: "ExampleInstance"
-      register: ec2
+        network:
+          assign_pubic_ip: true
 
     - name: Add new instance to host group
       add_host:
