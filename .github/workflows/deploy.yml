@@ -24,7 +24,7 @@ jobs:
     - name: Install dependencies
       run: |
         python -m pip install --upgrade pip
-        pip install python-pip python3-pip boto boto3 ansible botocore
+        pip install python-pip boto boto3 ansible botocore
 
     - name: Install Ansible collections
       run: |
@@ -36,7 +36,7 @@ jobs:
         aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
         aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws-region: ap-northeast-2
-        
+
     - name: Run Ansible playbook
       env:
         key: ${{ secrets.AWS_SSH_KEY }}
