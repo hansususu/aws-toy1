@@ -26,19 +26,16 @@ jobs:
 
     - name: Install dependencies
       run: |
-        python -m pip install --upgrade pip
-        pip install python-pip boto3 ansible botocore
+        python -m venv venv
+        source venv/bin/activate
+        pip install --upgrade pip
+        pip install boto3 ansible botocore
 
     - name: Install Ansible collections
       run: |
+        source venv/bin/activate
         echo -e "---\ncollections:\n  - name: amazon.aws\n    version: '>=1.4.0'" > requirements.yml
         ansible-galaxy collection install -r requirements.yml
-    - name: Configure AWS Credentials
-      uses: aws-actions/configure-aws-credentials@v1
-      with:
-        aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        aws-region: ap-northeast-2
 
     - name: Run Ansible playbook
       env:
@@ -46,4 +43,5 @@ jobs:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       run: |
+        source venv/bin/activate
         ansible-playbook -i ansible/hosts ansible/playbook.yml
