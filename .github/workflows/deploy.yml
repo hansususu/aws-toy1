@@ -25,6 +25,11 @@ jobs:
         python -m pip install --upgrade pip
         pip install boto3 ansible
 
+    - name: Install Ansible collections
+      run: |
+        echo -e "---\ncollections:\n  - name: amazon.aws\n    version: '>=1.4.0'" > requirements.yml
+        ansible-galaxy collection install -r requirements.yml
+
     - name: Run Ansible playbook
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
