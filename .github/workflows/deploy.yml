@@ -24,12 +24,16 @@ jobs:
       with:
         python-version: '3.8'
 
-    - name: Install dependencies
-      run: |
-        python -m venv venv
-        source venv/bin/activate
-        pip install --upgrade pip
-        pip install boto3 ansible botocore
+    - name: Ensure virtual environment is present
+      command: python3 -m venv /path/to/your/venv
+      args:
+        creates: /path/to/your/venv/bin/python
+
+    - name: Install pip in the virtual environment
+      command: /path/to/your/venv/bin/pip install --upgrade pip
+
+    - name: Install Python dependencies
+      command: /path/to/your/venv/bin/pip install boto3 ansible botocore
 
     - name: Install Ansible collections
       run: |
