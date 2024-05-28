@@ -26,4 +26,23 @@ jobs:
         args: --acl public-read --exclude '*' --include 'index.html'
       env:
         AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
+    - name: Deploy rdS
+      uses: bitovi/github-actions-deploy-rds@v0.1.5
+      with: 
+        aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        aws_default_region: 'ap-northeast-2'
+
+        aws_rds_db_enable: true
+        aws_rds_db_proxy: true
+        aws_rds_db_name: some-db-name
+        aws_rds_db_user: myrdsuser
+        aws_rds_db_engine: mysql
+        aws_rds_db_ingress_allow_all: true
+        aws_rds_db_subnets: subnet-05ba0fc17ae5eada5,subnet-05fffc2e1b0b814f1
+        aws_rds_db_allocated_storage: 10
+        aws_rds_db_max_allocated_storage: 20
+        aws_rds_db_instance_class: db.t3.micro
+        aws_vpc_id: vpc-086bc9e0e20adff30
+
 
