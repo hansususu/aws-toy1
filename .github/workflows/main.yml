@@ -12,7 +12,6 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     env:
-      S3_BUCKET_NAME: 'toytest-bucket'
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }} 
       AWS_REGION: 'ap-northeast-2'
@@ -26,5 +25,5 @@ jobs:
       with:
         args: --acl public-read --exclue '*' --include 'index.html'
       env:
-        AWS_S3_BUCKET: ${{ S3_BUCKET_NAME }}
+        AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
 
