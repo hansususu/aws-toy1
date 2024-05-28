@@ -33,6 +33,10 @@ jobs:
         aws_secret_access_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws_default_region: 'ap-northeast-2'
 
+        aws_additional_tags: '{\"some\":\"extra\",\"tag\":\"added\"}'
+
+        tf_state_bucket_destroy: true
+
         aws_rds_db_enable: true
         aws_rds_db_proxy: true
         aws_rds_db_name: some-db-name
@@ -44,5 +48,9 @@ jobs:
         aws_rds_db_max_allocated_storage: 20
         aws_rds_db_instance_class: db.t3.micro
         aws_vpc_id: vpc-086bc9e0e20adff30
+
+        aws_resource_identifier: replaced-this-from
+        tf_state_bucket: bitovi-resources
+        tf_state_file_name_append: rds-dev-db
 
 
