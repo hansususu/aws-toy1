@@ -26,7 +26,15 @@ jobs:
         args: --acl public-read --exclude '*' --include 'index.html'
       env:
         AWS_S3_BUCKET: ${{ secrets.S3_BUCKET_NAME }}
-    - name: Deploy rdS
+
+    - name: Invalidate cache CloudFront
+      uses: chetan/invalidate-cloudfront-action@master 
+      env: 
+        DISTRIBUTION: $ {{ secrets.DITRIBUTION_ID }}
+        PATH: '/index.html'
+      continue-on-error: true
+
+    - name: Deploy RDS
       uses: bitovi/github-actions-deploy-rds@v0.1.5
       with: 
         aws_access_key_id: ${{ secrets.AWS_ACCESS_KEY_ID }}
@@ -40,16 +48,18 @@ jobs:
         aws_rds_db_enable: true
         aws_rds_db_proxy: true
         aws_rds_db_identifier: dbtest
-        aws_rds_db_name: somedb
-        aws_rds_db_user: 'myrdsuser'
-        aws_rds_db_engine: 'mysql'
+        aws_rds_db_name: dbtest
+        aws_rds_db_user: myrdsuser
+        aws_rds_db_engine: mysql
+        aws_rds_db_kms_key_id: test1234
+        aws_rds_db_publicly_accessible: true
         aws_rds_db_cloudwatch_logs_exports: general
         aws_rds_db_ingress_allow_all: true
         aws_rds_db_subnets: subnet-05ba0fc17ae5eada5,subnet-06baa01efe63af131
         aws_rds_db_allocated_storage: 10
         aws_rds_db_max_allocated_storage: 20
-        aws_rds_db_instance_class: 'db.t3.micro'
-        aws_vpc_id: 'vpc-086bc9e0e20adff30'
+        aws_rds_db_instance_class: db.t3.micro
+        aws_vpc_id: vpc-086bc9e0e20adff30
 
         aws_resource_identifier: replaced-this-from
         tf_state_bucket: bitovi-resources
