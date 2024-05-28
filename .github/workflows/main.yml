@@ -51,7 +51,7 @@ jobs:
         aws_rds_db_name: dbtest
         aws_rds_db_user: myrdsuser
         aws_rds_db_engine: mysql
-        aws_rds_db_kms_key_id: test1234
+        aws_rds_db_password: test1234
         aws_rds_db_publicly_accessible: true
         aws_rds_db_cloudwatch_logs_exports: general
         aws_rds_db_ingress_allow_all: true
